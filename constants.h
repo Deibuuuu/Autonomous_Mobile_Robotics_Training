@@ -18,9 +18,9 @@ const int BL_IN1 = 22;
 const int BL_IN2 = 23;
 
 // --- Back Right Motor ---
-const int BR_ENB = 10; 
-const int BR_IN3 = A4;
-const int BR_IN4 = A5;
+const int BR_ENB = 10;  
+const int BR_IN3 = 30;  
+const int BR_IN4 = 31;  
 
 // --- Test Settings ---
 const float TEST_SPEED = 0.5; // 50% Power

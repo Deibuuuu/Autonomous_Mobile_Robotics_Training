@@ -1,6 +1,6 @@
 #include "mecanumCar.h"
 
-MecanumCar::mecanumCar() {
+mecanumCar::mecanumCar() {
     // Front Left
     pinMode(FL_ENA, OUTPUT); pinMode(FL_IN1, OUTPUT); pinMode(FL_IN2, OUTPUT);
     // Front Right
@@ -44,6 +44,6 @@ MecanumCar::mecanumCar() {
       analogWrite(ena, (int)(abs(power) * 255));
   }
 
-  void MecanumCar::stop() {
+  void mecanumCar::stop() {
       drive(0, 0, 0);
   }
