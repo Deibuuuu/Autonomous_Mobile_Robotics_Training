@@ -1,26 +1,28 @@
 #pragma once
-
 #include <Arduino.h>
 
-// --- Front Left Motor ---
-const int FL_ENA = 5; 
-const int FL_IN1 = 7;
-const int FL_IN2 = 8;
+// --- Movement States ---
+enum RobotDirection {
+  RELEASE, //stop
+  FORWARD,
+  BACKWARD,
+  STRAFE_L,
+  STRAFE_R,
+  TURN_L,
+  TURN_R
+};
 
-// --- Front Right Motor ---
-const int FR_ENB = 6; 
-const int FR_IN3 = 11;
-const int FR_IN4 = 24;
+// --- L298N Motor Pins (Verified) ---
+const int FL_IN1 = 2;  const int FL_IN2 = 3;  const int FL_EN = 9;
+const int FR_IN1 = 4;  const int FR_IN2 = 5;  const int FR_EN = 10;
+const int RL_IN1 = 6;  const int RL_IN2 = 7;  const int RL_EN = 11;
+const int RR_IN1 = 8;  const int RR_IN2 = 12; const int RR_EN = 13;
 
-// --- Back Left Motor ---
-const int BL_ENA = 9; 
-const int BL_IN1 = 22;
-const int BL_IN2 = 23;
+// --- MPU6050 Raw Addresses ---
+const int MPU_ADDR = 0x68;
+const int PWR_MGMT_1 = 0x6B;
+const int GYRO_Z_OUT = 0x47; // Specifically for Z-Axis
 
-// --- Back Right Motor ---
-const int BR_ENB = 10;  
-const int BR_IN3 = 30;  
-const int BR_IN4 = 31;  
-
-// --- Test Settings ---
-const float TEST_SPEED = 0.5; // 50% Power
+// --- Stabilization Config ---
+const float GYRO_KP = 2.0;    
+const int BASE_SPEED = 200;

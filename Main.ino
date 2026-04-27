@@ -1,22 +1,21 @@
 #include "mecanumCar.h"
+#include "IMUSensor.h" // Ensure this line exists!
 
 mecanumCar robot;
+IMUSensor imu; 
 
 void setup() {
-  Serial.begin(115200);
-  Serial.println("phase 1: straight drive test");
-  delay(3000);
+    Serial.begin(115200);
+    imu.init();
 }
 
 void loop() {
-  Serial.println("moving forward...");
-  robot.drive(TEST_SPEED, 0, 0);
-  
+    imu.update();
+    float yawVal = imu.getYaw();
+    float correction = yawVal * GYRO_KP;
 
-  delay(2000);
+    // Fixed spelling and underscores
+    robot.move(STRAFE_R, BASE_SPEED, correction);
 
-  Serial.println("Stopping");
-  robot.stop();
-
-  while(true);
+    delay(10);
 }

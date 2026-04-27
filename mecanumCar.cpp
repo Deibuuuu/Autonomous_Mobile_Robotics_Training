@@ -1,49 +1,45 @@
 #include "mecanumCar.h"
 
 mecanumCar::mecanumCar() {
-    // Front Left
-    pinMode(FL_ENA, OUTPUT); pinMode(FL_IN1, OUTPUT); pinMode(FL_IN2, OUTPUT);
-    // Front Right
-    pinMode(FR_ENB, OUTPUT); pinMode(FR_IN3, OUTPUT); pinMode(FR_IN4, OUTPUT);
-    // Back Left
-    pinMode(BL_ENA, OUTPUT); pinMode(BL_IN1, OUTPUT); pinMode(BL_IN2, OUTPUT);
-    // Back Right
-    pinMode(BR_ENB, OUTPUT); pinMode(BR_IN3, OUTPUT); pinMode(BR_IN4, OUTPUT);
+    const int pins[] = {FL_IN1, FL_IN2, FL_EN, FR_IN1, FR_IN2, FR_EN, 
+                        RL_IN1, RL_IN2, RL_EN, RR_IN1, RR_IN2, RR_EN};
+    for(int i=0; i<12; i++) pinMode(pins[i], OUTPUT);
 }
 
-  void mecanumCar::drive(float vX, float vY, float vTH) {
-      // Mecanum Kinematics
-      float fl = vX - vY - vTH;
-      float fr = vX + vY + vTH;
-      float bl = vX + vY - vTH;
-      float br = vX - vY + vTH;
+void mecanumCar::move(RobotDirection dir, int speed, float correction) {
+    switch(dir) {
+        case FORWARD:   drive(speed, 0, correction);  break;
+        case BACKWARD:  drive(-speed, 0, correction); break;
+        case STRAFE_L:  drive(0, -speed, correction); break;
+        case STRAFE_R:  drive(0, speed, correction);  break;
+        case TURN_L:    drive(0, 0, -speed);          break;
+        case TURN_R:    drive(0, 0, speed);           break;
+        case RELEASE:   stop();                       break;
+    }
+}
 
-      // Normalization
-      float maxVal = max(abs(fl), max(abs(fr), max(abs(bl), abs(br))));
-      if (maxVal > 1.0) {
-          fl /= maxVal; fr /= maxVal; bl /= maxVal; br /= maxVal;
-      }
+void mecanumCar::drive(int vX, int vY, float vTH) {
+    // Corrected wheel kinematics logic
+    int fl = vX + vY + vTH; // Front Left
+    int fr = vX - vY - vTH; // Front Right
+    int rl = vX - vY + vTH; // Rear Left
+    int rr = vX + vY - vTH; // Rear Right
 
-      setMotor(FL_ENA, FL_IN1, FL_IN2, fl);
-      setMotor(FR_ENB, FR_IN3, FR_IN4, fr);
-      setMotor(BL_ENA, BL_IN1, BL_IN2, bl);
-      setMotor(BR_ENB, BR_IN3, BR_IN4, br);
-  }
+    setMotor(FL_IN1, FL_IN2, FL_EN, fl);
+    setMotor(FR_IN1, FR_IN2, FR_EN, fr);
+    setMotor(RL_IN1, RL_IN2, RL_EN, rl);
+    setMotor(RR_IN1, RR_IN2, RR_EN, rr);
+}
 
-  void mecanumCar::setMotor(int ena, int in1, int in2, float power) {
-      if (power > 0) { // Forward
-          digitalWrite(in1, HIGH);
-          digitalWrite(in2, LOW);
-      } else if (power < 0) { // Backward
-          digitalWrite(in1, LOW);
-          digitalWrite(in2, HIGH);
-      } else { // Stop
-          digitalWrite(in1, LOW);
-          digitalWrite(in2, LOW);
-      }
-      analogWrite(ena, (int)(abs(power) * 255));
-  }
+void mecanumCar::setMotor(int in1, int in2, int en, int speed) {
+    if (speed > 0) {
+        digitalWrite(in1, HIGH); digitalWrite(in2, LOW);
+    } else if (speed < 0) {
+        digitalWrite(in1, LOW); digitalWrite(in2, HIGH);
+    } else {
+        digitalWrite(in1, LOW); digitalWrite(in2, LOW);
+    }
+    analogWrite(en, constrain(abs(speed), 0, 255));
+}
 
-  void mecanumCar::stop() {
-      drive(0, 0, 0);
-  }
+void mecanumCar::stop() { drive(0, 0, 0); }
