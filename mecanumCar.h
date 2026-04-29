@@ -12,6 +12,6 @@ class mecanumCar {
     void drive(int vX, int vY, float vTH);
     void stop();
 
-  private:
+  private: 
     void setMotor(int in1, int in2, int en, int speed);
 };

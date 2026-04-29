@@ -15,7 +15,24 @@ void loop() {
     float correction = yawVal * GYRO_KP;
 
     // Fixed spelling and underscores
-    robot.move(STRAFE_R, BASE_SPEED, correction);
+    robot.move(FORWARD, BASE_SPEED, correction);
+    delay(1000);
 
-    delay(10);
+    robot.move(BACKWARD, BASE_SPEED, correction); //FORWARD, BACKWARD, STRAFE_L, STRAFE_R, TURN_L, TURN_R, RELEASE (stop)
+    delay(1000);
+
+    robot.move(STRAFE_L, BASE_SPEED, correction);
+    delay(1000);
+
+    robot.move(STRAFE_R, BASE_SPEED, correction);
+    delay(1000);
+
+    robot.move(TURN_L, BASE_SPEED, correction);
+    delay(1000);
+
+    robot.move(TURN_R, BASE_SPEED, correction);
+    delay(1000);
+
+    robot.move(RELEASE, BASE_SPEED, correction);
+    delay(1000);
 }

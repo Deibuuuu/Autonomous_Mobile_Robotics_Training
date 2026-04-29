@@ -12,6 +12,8 @@ enum RobotDirection {
   TURN_R
 };
 
+
+
 // --- L298N Motor Pins (Verified) ---
 const int FL_IN1 = 2;  const int FL_IN2 = 3;  const int FL_EN = 9;
 const int FR_IN1 = 4;  const int FR_IN2 = 5;  const int FR_EN = 10;
@@ -26,3 +28,14 @@ const int GYRO_Z_OUT = 0x47; // Specifically for Z-Axis
 // --- Stabilization Config ---
 const float GYRO_KP = 2.0;    
 const int BASE_SPEED = 200;
+
+// --- Buttons Pins ---
+const int START_BTN = A0;
+const int STOP_BTN = A1;
+const int RESET_BTN = A2;
+
+enum SystemState {
+  IDLE,
+  RUNNING,
+  STOPPED
+};
