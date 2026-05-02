@@ -7,6 +7,8 @@ void systemController::begin() {
   pinMode(START_BTN, INPUT_PULLUP);
   pinMode(STOP_BTN, INPUT_PULLUP);
   pinMode(RESET_BTN, INPUT_PULLUP);
+
+  BT_SERIAL.begin(BT_BAUD);
   _imu.init(); //iniatialization of IMU
 }
 
@@ -52,7 +54,18 @@ void systemController::executeState() {
   } else {
     _robot.stop();
   }
+
+  sendTelemetry();
 };
+
+void systemController::sendTelemetry() {
+  static unsigned long lastMsg = 0;
+  if (millis() - lastMsg > 250) {
+    BT_SERIAL.print(F("Yaw: ")); BT_SERIAL.print(_imu.getYaw());
+    BT_SERIAL.print(F(" | State: ")); BT_SERIAL.println(_currentState);
+    lastMsg = millis();
+  }
+}
 
 void systemController::update() {
   handleButtons();

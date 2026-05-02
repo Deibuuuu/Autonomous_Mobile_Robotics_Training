@@ -12,6 +12,7 @@ public:
 private:
   void handleButtons();
   void executeState();
+  void sendTelemetry();
 
   mecanumCar& _robot;
   IMUSensor& _imu;
